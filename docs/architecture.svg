@@ -1,0 +1,175 @@
+<svg width="100%" viewBox="0 0 680 720" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <style>
+      .c-blue { fill: #E6F1FB; stroke: #185FA5; }
+      .c-blue text { fill: #0C447C; }
+      .c-purple { fill: #EEEDFE; stroke: #534AB7; }
+      .c-purple text { fill: #3C3489; }
+      .c-teal { fill: #E1F5EE; stroke: #0F6E56; }
+      .c-teal text { fill: #085041; }
+      .c-coral { fill: #FAECE7; stroke: #993C1D; }
+      .c-coral text { fill: #712B13; }
+      .c-green { fill: #EAF3DE; stroke: #3B6D11; }
+      .c-green text { fill: #27500A; }
+      .t { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 400; fill: #2C2C2A; }
+      .ts { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 12px; font-weight: 400; fill: #5F5E5A; }
+      .th { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 500; fill: #2C2C2A; }
+      .arr { stroke: #5F5E5A; stroke-width: 1.5; fill: none; }
+      .node { cursor: pointer; }
+      .node:hover text { opacity: 0.7; }
+      @media (prefers-color-scheme: dark) {
+        .c-blue { fill: #042C53; stroke: #B5D4F4; }
+        .c-blue text { fill: #B5D4F4; }
+        .c-purple { fill: #26215C; stroke: #AFA9EC; }
+        .c-purple text { fill: #CECBF6; }
+        .c-teal { fill: #04342C; stroke: #5DCAA5; }
+        .c-teal text { fill: #9FE1CB; }
+        .c-coral { fill: #4A1B0C; stroke: #F0997B; }
+        .c-coral text { fill: #F5C4B3; }
+        .c-green { fill: #173404; stroke: #97C459; }
+        .c-green text { fill: #C0DD97; }
+        .t, .ts, .th { fill: #C2C0B6; }
+        .arr { stroke: #9C9A92; }
+      }
+    </style>
+  </defs>
+  
+  <!-- Title -->
+  <text class="th" x="340" y="35" text-anchor="middle">Ethics Engine Architecture for NWO Robotics</text>
+  
+  <!-- LAYER 1: AGENTS -->
+  <g class="c-blue">
+    <rect x="40" y="60" width="160" height="52" rx="8" stroke-width="0.5"/>
+    <text class="th" x="120" y="80" text-anchor="middle" dominant-baseline="central">Robot Agent A</text>
+    <text class="ts" x="120" y="98" text-anchor="middle" dominant-baseline="central">Collaborative arm</text>
+  </g>
+  
+  <g class="c-blue">
+    <rect x="260" y="60" width="160" height="52" rx="8" stroke-width="0.5"/>
+    <text class="th" x="340" y="80" text-anchor="middle" dominant-baseline="central">Robot Agent B</text>
+    <text class="ts" x="340" y="98" text-anchor="middle" dominant-baseline="central">Mobile robot</text>
+  </g>
+  
+  <g class="c-blue">
+    <rect x="480" y="60" width="160" height="52" rx="8" stroke-width="0.5"/>
+    <text class="th" x="560" y="80" text-anchor="middle" dominant-baseline="central">Robot Agent C</text>
+    <text class="ts" x="560" y="98" text-anchor="middle" dominant-baseline="central">Autonomous vehicle</text>
+  </g>
+  
+  <!-- LAYER 1 to LAYER 2 arrows -->
+  <line x1="120" y1="112" x2="120" y2="150" class="arr" marker-end="url(#arrow)"/>
+  <line x1="340" y1="112" x2="340" y2="150" class="arr" marker-end="url(#arrow)"/>
+  <line x1="560" y1="112" x2="560" y2="150" class="arr" marker-end="url(#arrow)"/>
+  
+  <!-- LAYER 2: API GATEWAY -->
+  <g class="c-purple">
+    <rect x="60" y="150" width="560" height="68" rx="8" stroke-width="0.5"/>
+    <text class="th" x="340" y="172" text-anchor="middle" dominant-baseline="central">Ethics Engine API Gateway</text>
+    <text class="ts" x="340" y="192" text-anchor="middle" dominant-baseline="central">Authentication • Rate Limiting • Request Routing • Audit Logging</text>
+  </g>
+  
+  <!-- LAYER 2 to LAYER 3 arrows -->
+  <line x1="200" y1="218" x2="200" y2="250" class="arr" marker-end="url(#arrow)"/>
+  <line x1="340" y1="218" x2="340" y2="250" class="arr" marker-end="url(#arrow)"/>
+  <line x1="480" y1="218" x2="480" y2="250" class="arr" marker-end="url(#arrow)"/>
+  
+  <!-- LAYER 3: CORE SERVICES -->
+  <!-- Model Inference -->
+  <g class="c-teal">
+    <rect x="80" y="250" width="140" height="60" rx="8" stroke-width="0.5"/>
+    <text class="th" x="150" y="272" text-anchor="middle" dominant-baseline="central">Model Inference</text>
+    <text class="ts" x="150" y="292" text-anchor="middle" dominant-baseline="central">SEP-based LM</text>
+  </g>
+  
+  <!-- Reasoning Engine -->
+  <g class="c-teal">
+    <rect x="290" y="250" width="140" height="60" rx="8" stroke-width="0.5"/>
+    <text class="th" x="360" y="272" text-anchor="middle" dominant-baseline="central">Reasoning Engine</text>
+    <text class="ts" x="360" y="292" text-anchor="middle" dominant-baseline="central">Framework routing</text>
+  </g>
+  
+  <!-- Caching & Storage -->
+  <g class="c-teal">
+    <rect x="500" y="250" width="140" height="60" rx="8" stroke-width="0.5"/>
+    <text class="th" x="570" y="272" text-anchor="middle" dominant-baseline="central">Caching & Storage</text>
+    <text class="ts" x="570" y="292" text-anchor="middle" dominant-baseline="central">Redis • PostgreSQL</text>
+  </g>
+  
+  <!-- LAYER 3 to LAYER 4 arrows -->
+  <line x1="200" y1="310" x2="200" y2="360" class="arr" marker-end="url(#arrow)"/>
+  <line x1="360" y1="310" x2="360" y2="360" class="arr" marker-end="url(#arrow)"/>
+  <line x1="480" y1="310" x2="480" y2="360" class="arr" marker-end="url(#arrow)"/>
+  
+  <!-- LAYER 4: PHILOSOPHICAL FRAMEWORKS -->
+  <g class="c-coral">
+    <rect x="40" y="360" width="130" height="72" rx="8" stroke-width="0.5"/>
+    <text class="th" x="105" y="380" text-anchor="middle" dominant-baseline="central">Deontology</text>
+    <text class="ts" x="105" y="400" text-anchor="middle" dominant-baseline="central">Duties &amp;</text>
+    <text class="ts" x="105" y="416" text-anchor="middle" dominant-baseline="central">obligations</text>
+  </g>
+  
+  <g class="c-coral">
+    <rect x="190" y="360" width="130" height="72" rx="8" stroke-width="0.5"/>
+    <text class="th" x="255" y="380" text-anchor="middle" dominant-baseline="central">Consequentialism</text>
+    <text class="ts" x="255" y="400" text-anchor="middle" dominant-baseline="central">Outcomes &amp;</text>
+    <text class="ts" x="255" y="416" text-anchor="middle" dominant-baseline="central">utility</text>
+  </g>
+  
+  <g class="c-coral">
+    <rect x="340" y="360" width="130" height="72" rx="8" stroke-width="0.5"/>
+    <text class="th" x="405" y="380" text-anchor="middle" dominant-baseline="central">Virtue Ethics</text>
+    <text class="ts" x="405" y="400" text-anchor="middle" dominant-baseline="central">Character &amp;</text>
+    <text class="ts" x="405" y="416" text-anchor="middle" dominant-baseline="central">judgment</text>
+  </g>
+  
+  <g class="c-coral">
+    <rect x="490" y="360" width="130" height="72" rx="8" stroke-width="0.5"/>
+    <text class="th" x="555" y="380" text-anchor="middle" dominant-baseline="central">Applied Ethics</text>
+    <text class="ts" x="555" y="400" text-anchor="middle" dominant-baseline="central">Professional &amp;</text>
+    <text class="ts" x="555" y="416" text-anchor="middle" dominant-baseline="central">situational</text>
+  </g>
+  
+  <!-- LAYER 4 to LAYER 5 arrows -->
+  <path d="M 105 432 Q 105 460 200 490" class="arr" marker-end="url(#arrow)"/>
+  <path d="M 255 432 Q 255 460 320 490" class="arr" marker-end="url(#arrow)"/>
+  <path d="M 405 432 Q 405 460 360 490" class="arr" marker-end="url(#arrow)"/>
+  <path d="M 555 432 Q 555 460 440 490" class="arr" marker-end="url(#arrow)"/>
+  
+  <!-- LAYER 5: SYNTHESIS & RESPONSE -->
+  <g class="c-green">
+    <rect x="120" y="490" width="440" height="80" rx="8" stroke-width="0.5"/>
+    <text class="th" x="340" y="516" text-anchor="middle" dominant-baseline="central">Reasoning Synthesis &amp; Response Generation</text>
+    <text class="ts" x="340" y="536" text-anchor="middle" dominant-baseline="central">Structured JSON: frameworks invoked • reasoning chains • confidence scores</text>
+    <text class="ts" x="340" y="554" text-anchor="middle" dominant-baseline="central">vs. Asimov comparison • human review flag • next steps</text>
+  </g>
+  
+  <!-- LAYER 5 to LAYER 6 arrows -->
+  <line x1="200" y1="570" x2="200" y2="610" class="arr" marker-end="url(#arrow)"/>
+  <line x1="480" y1="570" x2="480" y2="610" class="arr" marker-end="url(#arrow)"/>
+  
+  <!-- LAYER 6: AUDIT & NWO INTEGRATION -->
+  <g class="c-purple">
+    <rect x="80" y="610" width="160" height="60" rx="8" stroke-width="0.5"/>
+    <text class="th" x="160" y="632" text-anchor="middle" dominant-baseline="central">Audit Trail &amp;</text>
+    <text class="th" x="160" y="652" text-anchor="middle" dominant-baseline="central">Logging</text>
+  </g>
+  
+  <g class="c-purple">
+    <rect x="440" y="610" width="160" height="60" rx="8" stroke-width="0.5"/>
+    <text class="th" x="520" y="632" text-anchor="middle" dominant-baseline="central">NWO Robotics</text>
+    <text class="th" x="520" y="652" text-anchor="middle" dominant-baseline="central">Webhooks</text>
+  </g>
+  
+  <!-- Horizontal connector between final layer boxes -->
+  <line x1="240" y1="640" x2="440" y2="640" class="arr" marker-end="url(#arrow)" stroke-width="0.5"/>
+  
+  <!-- Side annotations -->
+  <text class="ts" x="30" y="90" text-anchor="end" fill="#5F5E5A">Agents</text>
+  <text class="ts" x="30" y="184" text-anchor="end" fill="#5F5E5A">Entry point</text>
+  <text class="ts" x="30" y="396" text-anchor="end" fill="#5F5E5A">Frameworks</text>
+  <text class="ts" x="30" y="530" text-anchor="end" fill="#5F5E5A">Output</text>
+  <text class="ts" x="30" y="640" text-anchor="end" fill="#5F5E5A">Integration</text>
+</svg>
