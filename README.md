@@ -17,7 +17,11 @@ Asimov's Three Laws are inadequate for real robots. This engine provides:
 
 Try it now:
 ```bash
-pip install ethics-engine
+# Install from GitHub (until PyPI release)
+pip install git+https://github.com/RedCiprianPater/ethics-engine.git
+
+# Or for a specific version
+pip install git+https://github.com/RedCiprianPater/ethics-engine.git@v0.1.0
 ```
 
 ## Philosophy, Not Rules
