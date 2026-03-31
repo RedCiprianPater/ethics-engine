@@ -6,6 +6,20 @@
 
 > **A distributed, open-source language model exposing philosophical reasoning as an agentic API—moving beyond Asimov's rigid Three Laws to provide contextual, discourse-based ethical guidance for autonomous agents.**
 
+## 🎯 Why This Matters
+
+Asimov's Three Laws are inadequate for real robots. This engine provides:
+
+- ✅ **Context-aware reasoning** — Not binary rules
+- ✅ **Transparent decision chains** — Every conclusion is explainable
+- ✅ **Philosophy-grounded** — Based on centuries of ethical theory
+- ✅ **Continuously improving** — Learns from real-world decisions
+
+Try it now:
+```bash
+pip install ethics-engine
+```
+
 ## Philosophy, Not Rules
 
 Traditional robotics laws (Asimov):
@@ -101,6 +115,8 @@ Agent → API → Model Inference → Reasoning Chain → JSON Response
 - [Philosophy Framework](docs/PHILOSOPHY_FRAMEWORK.md)
 - [Asimov Comparison](docs/ASIMOV_COMPARISON.md)
 - [Deployment Guide](docs/DEPLOYMENT.md)
+- [Roadmap](docs/ROADMAP.md)
+- [Contributing](docs/CONTRIBUTING.md)
 
 ## Model Training
 
@@ -118,5 +134,5 @@ Apache 2.0 - See [LICENSE](LICENSE) for details.
 
 ## Contact
 
-- GitHub: [github.com/nwo-capital/ethics-engine](https://github.com/nwo-capital/ethics-engine)
+- GitHub: [github.com/RedCiprianPater/ethics-engine](https://github.com/RedCiprianPater/ethics-engine)
 - Email: robotics@nwo.capital
