@@ -4,14 +4,16 @@
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green.svg)](https://fastapi.tiangolo.com/)
 
-> **A distributed, open-source language model exposing philosophical reasoning as an agentic API—moving beyond Asimov's rigid Three Laws to provide contextual, discourse-based ethical guidance for autonomous Agents & Robots.**
+> A distributed, open-source language model exposing philosophical reasoning as an agentic API—moving beyond Asimov's rigid Three Laws to provide contextual, discourse-based ethical guidance for autonomous agents & robots.
 
-## 🚀 Phase 2 Updates (NEW)
+## Phase 2 Updates (NEW)
 
 The training infrastructure is now live! Community-driven model development with real inference:
 
 ### ☁️ Cloud Training Support
+
 Train on any GPU provider:
+
 ```bash
 # Lambda Labs (recommended)
 python training/finetune.py --gpu lambda
@@ -26,21 +28,54 @@ python training/finetune.py --gpu colab --epochs 3
 python training/finetune.py --gpu sagemaker
 ```
 
+### 🆕 Simplified Training Script (RECOMMENDED)
+
+We now provide a streamlined training script that works out of the box:
+
+```bash
+python training/simple_train_working.py
+```
+
+This script handles:
+- 4-bit quantization for memory efficiency
+- Proper dataset formatting with labels
+- LoRA fine-tuning on Mistral-7B
+- Tested on Google Colab with Tesla T4 GPU
+
+*Note: The original finetune.py requires updates for newer transformers versions. See [TRAINING_FIXES.md](TRAINING_FIXES.md) for details.*
+
+### 🔄 Training Roadmap
+
+**Current Status:**
+- ✅ Initial model trained on 6 ethical scenarios
+- ✅ Working training pipeline established
+- ✅ 4-bit quantization for efficient training
+
+**Next Training Sessions:**
+- Week 1: +20 scenarios covering medical ethics
+- Week 2: +30 scenarios on AI alignment and safety
+- Week 3: +25 scenarios on environmental ethics
+- Week 4: Evaluation and refinement
+
 ### 🧠 Real Model Inference
+
 API now connects to actual fine-tuned models:
+
 ```bash
 # Load your trained model
 MODEL_PATH=models/ethics-v1 python -m ethics_engine.api.app
 ```
 
 Features:
-- **LoRA adapter support** - Efficient fine-tuning (only 1% of weights)
-- **Heuristic fallback** - Works without GPU using keyword matching
-- **Auto-framework selection** - Chooses relevant ethical frameworks automatically
-- **8-bit quantization** - Run on consumer hardware
+- LoRA adapter support - Efficient fine-tuning (only 1% of weights)
+- Heuristic fallback - Works without GPU using keyword matching
+- Auto-framework selection - Chooses relevant ethical frameworks automatically
+- 8-bit quantization - Run on consumer hardware
 
 ### 🤝 Community Contributions
+
 Submit your own ethical scenarios:
+
 ```bash
 # See contribution template
 python scripts/contribute.py --template
@@ -53,6 +88,7 @@ python scripts/contribute.py --aggregate
 ```
 
 ### 📊 Training Data Pipeline
+
 Sample dataset included (6 frameworks, 6 Q&A pairs):
 - Consequentialism
 - Deontology (Kant)
@@ -124,6 +160,7 @@ curl -X POST https://api.nworobotics.cloud/ethics/v1/resolve \
 ## Training Your Own Model
 
 ### 1. Prepare Data
+
 ```bash
 # Load philosophy sources
 python scripts/load_sources.py
@@ -136,8 +173,12 @@ python scripts/generate_qa.py
 ```
 
 ### 2. Train
+
 ```bash
-# On Colab (free)
+# Simple script (recommended)
+python training/simple_train_working.py
+
+# Or use the original script on Colab (free)
 python training/finetune.py --gpu colab --epochs 3
 
 # On Lambda Labs (~$2 for full training)
@@ -145,6 +186,7 @@ python training/finetune.py --gpu lambda --epochs 5
 ```
 
 ### 3. Deploy
+
 ```bash
 MODEL_PATH=models/ethics-v1 python -m ethics_engine.api.app
 ```
@@ -153,55 +195,54 @@ See [docs/TRAINING.md](docs/TRAINING.md) for full guide.
 
 ## Features
 
-- **🧠 Philosophical Grounding:** Based on Stanford Encyclopedia of Philosophy
-- **🔌 Agent API:** REST + gRPC + WebSocket endpoints
-- **📊 Structured Output:** JSON reasoning chains with confidence scores
-- **🎯 Framework Routing:** Automatically selects relevant ethical frameworks
-- **🔍 Explainability:** Full transparency into decision-making
-- **🧪 Scenario Testing:** Curated dilemma datasets
-- **☁️ Cloud Training:** Lambda, RunPod, SageMaker, Colab support
-- **🤝 Community:** Contribute training data via JSONL
+- 🧠 **Philosophical Grounding**: Based on Stanford Encyclopedia of Philosophy
+- 🔌 **Agent API**: REST + gRPC + WebSocket endpoints
+- 📊 **Structured Output**: JSON reasoning chains with confidence scores
+- 🎯 **Framework Routing**: Automatically selects relevant ethical frameworks
+- 🔍 **Explainability**: Full transparency into decision-making
+- 🧪 **Scenario Testing**: Curated dilemma datasets
+- ☁️ **Cloud Training**: Lambda, RunPod, SageMaker, Colab support
+- 🤝 **Community**: Contribute training data via JSONL
 
 ## Architecture
 
 ```
-┌─────────────┐     ┌──────────────┐     ┌─────────────────┐
-│   Agent     │────▶│  Ethics API  │────▶│  LoRA Adapter   │
-│  Request    │     │  /resolve    │     │  (Fine-tuned)   │
-└─────────────┘     └──────────────┘     └─────────────────┘
-                                                  │
-                       ┌──────────────────────────┘
-                       ▼
-              ┌─────────────────┐
-              │  Mistral-7B     │
-              │  (Base Model)   │
-              └─────────────────┘
-                       │
-                       ▼
-              ┌─────────────────┐
-              │ Heuristic       │ (Fallback if no GPU)
-              │ Fallback        │
-              └─────────────────┘
-                       │
-                       ▼
-              ┌─────────────────┐
-              │ JSON Response   │
-              │ + Reasoning     │
-              └─────────────────┘
+┌─────────────┐ ┌──────────────┐ ┌─────────────────┐
+│   Agent     │─────▶│ Ethics API │─────▶│ LoRA Adapter │
+│  Request    │      │ /resolve   │      │ (Fine-tuned) │
+└─────────────┘      └──────────────┘      └─────────────────┘
+                               │
+                               ▼
+                      ┌──────────────────┐
+                      │  Mistral-7B      │
+                      │ (Base Model)     │
+                      └──────────────────┘
+                               │
+                               ▼
+                      ┌──────────────────┐
+                      │  Heuristic       │ (Fallback if no GPU)
+                      │  Fallback        │
+                      └──────────────────┘
+                               │
+                               ▼
+                      ┌──────────────────┐
+                      │ JSON Response    │
+                      │ + Reasoning      │
+                      └──────────────────┘
 ```
 
 ## How It Differs from Asimov's Laws
 
-| Criterion | Asimov's Laws | Ethics Engine |
-|-----------|---------------|---------------|
-| **Flexibility** | Fixed, universal | Context-adaptive |
-| **Reasoning** | Binary output | Full chain of thought |
-| **Frameworks** | 3 rigid laws | 10+ philosophical frameworks |
-| **Explainability** | None | Complete transparency |
-| **Conflict Resolution** | Hierarchical (often fails) | Multi-framework synthesis |
-| **Learning** | None | Can learn from outcomes |
-| **Auditability** | No trail | Full audit log |
-| **Community** | Closed | Open contributions |
+| Criterion | Asimov Laws | Ethics Engine |
+|-----------|-------------|---------------|
+| Flexibility | Fixed, universal | Context-adaptive |
+| Reasoning | Binary output | Full chain of thought |
+| Frameworks | 3 rigid laws | 10+ philosophical frameworks |
+| Explainability | None | Complete transparency |
+| Conflict Resolution | Hierarchical (often fails) | Multi-framework synthesis |
+| Learning | None | Can learn from outcomes |
+| Auditability | No trail | Full audit log |
+| Community | Closed | Open contributions |
 
 ## Documentation
 
@@ -217,11 +258,11 @@ See [docs/TRAINING.md](docs/TRAINING.md) for full guide.
 ## Model Training
 
 The ethics model is fine-tuned on:
-- **Stanford Encyclopedia of Philosophy** (~2,500 articles)
-- **Internet Encyclopedia of Philosophy**
-- **Classic texts:** Aristotle, Kant, Mill
-- **Contemporary applied ethics** journals
-- **Community contributions** (JSONL format)
+- Stanford Encyclopedia of Philosophy (~2,500 articles)
+- Internet Encyclopedia of Philosophy
+- Classic texts: Aristotle, Kant, Mill
+- Contemporary applied ethics journals
+- Community contributions (JSONL format)
 
 See [training/](training/) for the full pipeline.
 
@@ -229,10 +270,10 @@ See [training/](training/) for the full pipeline.
 
 We welcome contributions!
 
-- **Training Data:** Submit ethical scenarios via `scripts/contribute.py`
-- **Code:** Open PRs for features or bug fixes
-- **Models:** Train and share your fine-tuned models
-- **Documentation:** Improve docs and examples
+- **Training Data**: Submit ethical scenarios via `scripts/contribute.py`
+- **Code**: Open PRs for features or bug fixes
+- **Models**: Train and share your fine-tuned models
+- **Documentation**: Improve docs and examples
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
@@ -248,4 +289,4 @@ Apache 2.0 - See [LICENSE](LICENSE) for details.
 
 ---
 
-**Built with 💚 for ethical AI and robotics**
+Built with 💚 for ethical AI and robotics
