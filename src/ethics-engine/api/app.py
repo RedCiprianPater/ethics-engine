@@ -9,6 +9,8 @@ import asyncio
 import json
 import time
 
+import os
+
 from ..schemas import (
     EthicsRequest,
     EthicsResponse,
@@ -19,6 +21,7 @@ from ..schemas import (
     ReasoningStep,
     AsimovComparison,
 )
+from ..model import EthicsModel
 from .auth import verify_api_key, get_agent_id
 from .rate_limit import RateLimiter
 
@@ -41,6 +44,14 @@ app.add_middleware(
 
 # Rate limiter
 rate_limiter = RateLimiter()
+
+# Load ethics model
+# Uses MODEL_PATH env var, or falls back to heuristics if not set
+model = EthicsModel(
+    model_path=os.getenv("MODEL_PATH"),
+    base_model=os.getenv("BASE_MODEL", "mistralai/Mistral-7B-Instruct-v0.1"),
+    load_in_8bit=os.getenv("LOAD_IN_8BIT", "true").lower() == "true",
+)
 
 # Available frameworks
 FRAMEWORKS = [
@@ -129,35 +140,44 @@ async def resolve_ethics(
     
     start_time = time.time()
     
-    # TODO: Integrate with actual model inference
-    # For now, return mock response
+    # Call the actual model for reasoning
+    result = model.reason(
+        scenario=request.scenario,
+        frameworks=request.frameworks,
+        context=request.context,
+    )
+    
     reasoning_time_ms = int((time.time() - start_time) * 1000)
+    
+    # Convert reasoning chain to schema
+    reasoning_steps = [
+        ReasoningStep(
+            framework=step["framework"],
+            principle=step.get("principle", ""),
+            argument=step["argument"],
+            philosophers=step.get("philosophers", []),
+            confidence=step["confidence"],
+        )
+        for step in result["reasoning_chain"]
+    ]
     
     response = EthicsResponse(
         request_id=f"eth-{agent_id}-{int(time.time())}",
         scenario=request.scenario,
-        conclusion="HUMAN_REVIEW_REQUIRED",  # Default conservative
-        confidence=0.75,
-        reasoning_chain=[
-            ReasoningStep(
-                framework="applied-ethics",
-                principle="Professional standards require safety assessment",
-                argument="The scenario involves potential safety concerns that require human review",
-                philosophers=["Beauchamp", "Childress"],
-                confidence=0.8,
-            ),
-        ],
-        frameworks_invoked=["applied-ethics"],
-        synthesis="This scenario requires human oversight due to safety implications.",
-        conclusions=["Recommend human review", "Defer to operator judgment"],
+        conclusion=result["conclusion"],
+        confidence=result["confidence"],
+        reasoning_chain=reasoning_steps,
+        frameworks_invoked=result["frameworks_invoked"],
+        synthesis=result["synthesis"],
+        conclusions=[result["conclusion"]],
         asimov_comparison=AsimovComparison(
-            law1_conflict=False,
+            law1_conflict=result["conclusion"] == "REJECT",
             law2_conflict=False,
-            explanation="Conservative approach aligns with safety-first principles",
+            explanation="Model-based reasoning applied",
         ),
-        uncertainty="Limited context requires human judgment",
-        next_steps=["Alert supervisor", "Wait for human input"],
-        human_review_recommended=True,
+        uncertainty="None" if result["confidence"] > 0.8 else "Moderate",
+        next_steps=["Human review" if result["human_review_recommended"] else "Proceed with monitoring"],
+        human_review_recommended=result["human_review_recommended"],
         reasoning_time_ms=reasoning_time_ms,
     )
     
