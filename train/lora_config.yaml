@@ -1,0 +1,46 @@
+# LoRA Training Configuration for Ethics Engine
+
+# Model settings
+model_name: "mistralai/Mistral-3B-Instruct-v0.1"  # or similar
+output_dir: "./train/output"
+
+# LoRA parameters
+lora:
+  r: 16              # LoRA rank (8-32 typical)
+  alpha: 32          # Scaling factor (2*r typical)
+  dropout: 0.05      # Dropout for regularization
+  target_modules:    # Which layers to adapt
+    - "q_proj"
+    - "v_proj"
+    - "k_proj"
+    - "o_proj"
+
+# Training parameters
+training:
+  num_epochs: 3
+  batch_size: 4
+  gradient_accumulation_steps: 4
+  learning_rate: 2.0e-4
+  warmup_steps: 100
+  max_seq_length: 1024
+  save_steps: 500
+  logging_steps: 10
+
+# Data settings
+data:
+  train_file: "data/processed/training_dataset.jsonl"
+  validation_split: 0.1
+  
+# Format template for training
+# Input: scenario + framework
+# Output: reasoning + conclusion
+template: |
+  ### Instruction:
+  Analyze the following ethical scenario using {framework} framework.
+  
+  Scenario: {scenario}
+  
+  ### Response:
+  Reasoning: {reasoning}
+  
+  Conclusion: {conclusion}
