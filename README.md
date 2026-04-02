@@ -161,7 +161,7 @@ Asimov's Three Laws are inadequate for real robots. This engine provides:
 ### Install
  
 ```bash
-pip install ethics-engine
+pip install nwo-ethics-engine
 ```
  
 ### Python SDK (With Live Model)
