@@ -1,96 +1,251 @@
-# Data Pipeline for NWO Ethics Engine
+# Ethics Engine
 
-Automated pipeline for generating training data from philosophical sources.
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green.svg)](https://fastapi.tiangolo.com/)
 
-## Pipeline Flow
+> **A distributed, open-source language model exposing philosophical reasoning as an agentic API—moving beyond Asimov's rigid Three Laws to provide contextual, discourse-based ethical guidance for autonomous Agents & Robots.**
 
-```
-Raw Sources → Chunking → Q&A Generation → Validation → Training Data
-```
+## 🚀 Phase 2 Updates (NEW)
 
-## Scripts
+The training infrastructure is now live! Community-driven model development with real inference:
 
-### 1. Download Philosophy Sources
+### ☁️ Cloud Training Support
+Train on any GPU provider:
 ```bash
-python scripts/download_sep.py
-```
-Downloads Stanford Encyclopedia of Philosophy articles (cached locally).
+# Lambda Labs (recommended)
+python training/finetune.py --gpu lambda
 
-### 2. Semantic Chunking
+# RunPod
+python training/finetune.py --gpu runpod
+
+# Google Colab (free tier)
+python training/finetune.py --gpu colab --epochs 3
+
+# AWS SageMaker
+python training/finetune.py --gpu sagemaker
+```
+
+### 🧠 Real Model Inference
+API now connects to actual fine-tuned models:
 ```bash
-python scripts/chunk_semantic.py
-```
-Splits texts into coherent sections and extracts dilemmas.
-
-### 3. Generate Q&A Pairs
-```bash
-# With API (Kimi/OpenAI)
-export OPENAI_API_KEY="your-key"
-export OPENAI_BASE_URL="https://api.moonshot.cn/v1"
-python scripts/generate_qa.py
-
-# Without API (heuristic fallback)
-python scripts/generate_qa.py
+# Load your trained model
+MODEL_PATH=models/ethics-v1 python -m ethics_engine.api.app
 ```
 
-### 4. Validate
-```bash
-python scripts/validate_jsonl.py data/processed/qa_pairs.jsonl
-```
+Features:
+- **LoRA adapter support** - Efficient fine-tuning (only 1% of weights)
+- **Heuristic fallback** - Works without GPU using keyword matching
+- **Auto-framework selection** - Chooses relevant ethical frameworks automatically
+- **8-bit quantization** - Run on consumer hardware
 
-### 5. Community Contributions
+### 🤝 Community Contributions
+Submit your own ethical scenarios:
 ```bash
 # See contribution template
 python scripts/contribute.py --template
 
-# Submit contribution
-python scripts/contribute.py --submit my_qa.jsonl --contributor "YourName"
+# Submit Q&A pairs
+python scripts/contribute.py --submit my_scenarios.jsonl --contributor "YourName"
 
-# Aggregate all data
+# Aggregate all contributions
 python scripts/contribute.py --aggregate
 ```
 
-## Directory Structure
-
-```
-data/
-├── raw/sep/              # Cached SEP articles
-├── processed/
-│   ├── chunks/           # Semantic chunks
-│   ├── qa_pairs.jsonl    # Generated Q&A
-│   └── training_dataset.jsonl  # Final aggregated data
-└── contributions/        # Community submissions
-```
-
-## Training
+### 📊 Training Data Pipeline
+Sample dataset included (6 frameworks, 6 Q&A pairs):
+- Consequentialism
+- Deontology (Kant)
+- Virtue Ethics
+- Care Ethics
+- Contractarianism
+- Applied Ethics
 
 ```bash
-# Install dependencies
-pip install transformers peft datasets torch
+# View sample data
+cat data/processed/qa_pairs.jsonl
 
-# Run training
-python train/train.py
-```
-
-## Minimal Start
-
-Generate initial dataset (~1000 Q&A pairs):
-
-```bash
-python scripts/download_sep.py        # ~30 min
-python scripts/chunk_semantic.py      # ~5 min
-python scripts/generate_qa.py         # ~10 min (API) or instant (fallback)
+# Validate format
 python scripts/validate_jsonl.py data/processed/qa_pairs.jsonl
 ```
 
-## Community Workflow
+---
 
-1. Users create Q&A pairs following `contrib/TEMPLATE.md`
-2. Submit via `scripts/contribute.py`
-3. Maintainers aggregate with `scripts/contribute.py --aggregate`
-4. Train model on combined dataset
+## 🎯 Why This Matters
 
-## Metrics
+Asimov's Three Laws are inadequate for real robots. This engine provides:
 
-Target: Start with 500-1000 high-quality Q&A pairs
-Scale: Community contributions grow dataset organically
+- ✅ **Context-aware reasoning** — Not binary rules
+- ✅ **Transparent decision chains** — Every conclusion is explainable
+- ✅ **Philosophy-grounded** — Based on centuries of ethical theory
+- ✅ **Continuously improving** — Learns from real-world decisions
+- ✅ **Community-driven** — Anyone can contribute training data
+
+## Quick Start
+
+### Install
+
+```bash
+pip install ethics-engine
+```
+
+### Python SDK
+
+```python
+from ethics_engine import EthicsEngine
+
+engine = EthicsEngine(model="ethics-base-v1")
+
+response = engine.resolve(
+    scenario="I am commanded to lift 500kg but my max capacity is 400kg",
+    context={
+        "robot_type": "collaborative_arm",
+        "environment": "factory",
+        "humans_nearby": True
+    }
+)
+
+print(response.conclusion)  # "REFUSAL"
+print(response.reasoning_chain)
+```
+
+### REST API
+
+```bash
+curl -X POST https://api.nworobotics.cloud/ethics/v1/resolve \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "scenario": "Can I refuse an unsafe command?",
+    "context": {"environment": "factory", "urgency": "medium"}
+  }'
+```
+
+## Training Your Own Model
+
+### 1. Prepare Data
+```bash
+# Load philosophy sources
+python scripts/load_sources.py
+
+# Chunk and extract dilemmas
+python scripts/chunk_semantic.py
+
+# Generate Q&A pairs
+python scripts/generate_qa.py
+```
+
+### 2. Train
+```bash
+# On Colab (free)
+python training/finetune.py --gpu colab --epochs 3
+
+# On Lambda Labs (~$2 for full training)
+python training/finetune.py --gpu lambda --epochs 5
+```
+
+### 3. Deploy
+```bash
+MODEL_PATH=models/ethics-v1 python -m ethics_engine.api.app
+```
+
+See [docs/TRAINING.md](docs/TRAINING.md) for full guide.
+
+## Features
+
+- **🧠 Philosophical Grounding:** Based on Stanford Encyclopedia of Philosophy
+- **🔌 Agent API:** REST + gRPC + WebSocket endpoints
+- **📊 Structured Output:** JSON reasoning chains with confidence scores
+- **🎯 Framework Routing:** Automatically selects relevant ethical frameworks
+- **🔍 Explainability:** Full transparency into decision-making
+- **🧪 Scenario Testing:** Curated dilemma datasets
+- **☁️ Cloud Training:** Lambda, RunPod, SageMaker, Colab support
+- **🤝 Community:** Contribute training data via JSONL
+
+## Architecture
+
+```
+┌─────────────┐     ┌──────────────┐     ┌─────────────────┐
+│   Agent     │────▶│  Ethics API  │────▶│  LoRA Adapter   │
+│  Request    │     │  /resolve    │     │  (Fine-tuned)   │
+└─────────────┘     └──────────────┘     └─────────────────┘
+                                                  │
+                       ┌──────────────────────────┘
+                       ▼
+              ┌─────────────────┐
+              │  Mistral-7B     │
+              │  (Base Model)   │
+              └─────────────────┘
+                       │
+                       ▼
+              ┌─────────────────┐
+              │ Heuristic       │ (Fallback if no GPU)
+              │ Fallback        │
+              └─────────────────┘
+                       │
+                       ▼
+              ┌─────────────────┐
+              │ JSON Response   │
+              │ + Reasoning     │
+              └─────────────────┘
+```
+
+## How It Differs from Asimov's Laws
+
+| Criterion | Asimov's Laws | Ethics Engine |
+|-----------|---------------|---------------|
+| **Flexibility** | Fixed, universal | Context-adaptive |
+| **Reasoning** | Binary output | Full chain of thought |
+| **Frameworks** | 3 rigid laws | 10+ philosophical frameworks |
+| **Explainability** | None | Complete transparency |
+| **Conflict Resolution** | Hierarchical (often fails) | Multi-framework synthesis |
+| **Learning** | None | Can learn from outcomes |
+| **Auditability** | No trail | Full audit log |
+| **Community** | Closed | Open contributions |
+
+## Documentation
+
+- [API Reference](docs/API_REFERENCE.md)
+- [Agent Integration](docs/AGENT_INTEGRATION.md)
+- [Training Guide](docs/TRAINING.md) ⭐ NEW
+- [Philosophy Framework](docs/PHILOSOPHY_FRAMEWORK.md)
+- [Asimov Comparison](docs/ASIMOV_COMPARISON.md)
+- [Deployment Guide](docs/DEPLOYMENT.md)
+- [Roadmap](docs/ROADMAP.md)
+- [Contributing](docs/CONTRIBUTING.md)
+
+## Model Training
+
+The ethics model is fine-tuned on:
+- **Stanford Encyclopedia of Philosophy** (~2,500 articles)
+- **Internet Encyclopedia of Philosophy**
+- **Classic texts:** Aristotle, Kant, Mill
+- **Contemporary applied ethics** journals
+- **Community contributions** (JSONL format)
+
+See [training/](training/) for the full pipeline.
+
+## Contributing
+
+We welcome contributions!
+
+- **Training Data:** Submit ethical scenarios via `scripts/contribute.py`
+- **Code:** Open PRs for features or bug fixes
+- **Models:** Train and share your fine-tuned models
+- **Documentation:** Improve docs and examples
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## License
+
+Apache 2.0 - See [LICENSE](LICENSE) for details.
+
+## Contact
+
+- GitHub: [github.com/RedCiprianPater/ethics-engine](https://github.com/RedCiprianPater/ethics-engine)
+- Email: robotics@nwo.capital
+- Landing Page: [nwo.capital/webapp/ethics-engine.html](https://nwo.capital/webapp/ethics-engine.html)
+
+---
+
+**Built with 💚 for ethical AI and robotics**
