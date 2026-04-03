@@ -1,42 +1,33 @@
 # Changelog
 
-## [0.1.0] - 2026-04-01
+All notable changes to the Ethics Engine project will be documented in this file.
 
-### Added
-- Initial release of Ethics Engine
-- Python SDK (sync and async clients)
-- FastAPI server with REST endpoints
-- WebSocket streaming support
-- Six ethical frameworks: virtue ethics, deontology, consequentialism, care ethics, contractarianism, applied ethics
-- Structured JSON reasoning output
-- Asimov comparison feature
-- Rate limiting and authentication
-- Training pipeline structure
-- Documentation and examples
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-### Features
-- `/resolve` - Resolve ethical scenarios
-- `/compare` - Compare multiple actions
-- `/frameworks` - List available frameworks
-- `/learn` - Feedback for continuous learning
-- `/stream/reasoning` - Real-time reasoning stream
+## [2.0.0] - 2025-04-03
 
-## Roadmap
+### Major Changes
+- Retrained on expanded dataset: 6 → 185 scenarios (30x increase)
+- Training loss improved: 2.97 → 0.67 (77% improvement)
+- LoRA parameters optimized: 6.8M → 3.4M (more efficient)
+- Training time: ~36 minutes on Tesla T4
 
-### [0.2.0] - Planned
-- Fine-tuned model on SEP dataset
-- gRPC endpoints
-- Redis caching
-- Kubernetes deployment
+### Dataset
+- Added 179 new ethical scenarios
+- Covers broader range of ethical frameworks
+- Improved reasoning depth and conclusion quality
 
-### [0.3.0] - Planned
-- On-device model support
-- Domain-specific fine-tunes
-- Multi-modal reasoning (vision)
-- Continuous learning pipeline
+### Model
+- Same base: Mistral-7B-Instruct-v0.1
+- Updated adapter weights on HuggingFace
+- Maintains backward compatibility
 
-### [1.0.0] - Planned
-- Production-ready API
-- Full NWO Robotics integration
-- Comprehensive benchmark suite
-- Regulatory compliance modules
+## [1.0.0] - 2025-04-02
+
+### Initial Release
+- First fine-tuned ethics evaluation model
+- Base: Mistral-7B-Instruct-v0.1
+- Training data: 6 ethical scenarios
+- LoRA fine-tuning with 6.8M trainable parameters
+- Published on HuggingFace Hub
